@@ -21,3 +21,4 @@ build-backend = "poetry.core.masonry.api"
 taskipy = "^1.14.1"
 
 [tool.taskipy.tasks]
+runserver = {cmd = 'python3 backend/manage.py runserver', help = 'run django server'}
