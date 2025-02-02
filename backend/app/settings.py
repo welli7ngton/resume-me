@@ -1,3 +1,8 @@
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
+
 """
 Django settings for backend project.
 
@@ -10,7 +15,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
+from pathlib import Path  # type: ignore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,13 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#q%q4fe4i-f!2aebmw=c)k#!2k)1j_23*ste@l*m9_cb1)oaj&"
+SECRET_KEY = getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(getenv("DEBUG", 0)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    h.strip() for h in getenv("ALLOWED_HOSTS", "ALLOWED_HOSTS not defined").split(",")
+]
 
 
 # Application definition
@@ -75,11 +81,14 @@ WSGI_APPLICATION = "app.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": getenv("DB_ENGINE", "change-me"),
+        "NAME": getenv("POSTGRES_DB", "change-me"),
+        "USER": getenv("POSTGRES_USER", "change-me"),
+        "PASSWORD": getenv("POSTGRES_PASSWORD", "change-me"),
+        "HOST": getenv("POSTGRES_HOST", "change-me"),
+        "PORT": getenv("POSTGRES_PORT", "change-me"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -103,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-br"
 
 TIME_ZONE = "UTC"
 
